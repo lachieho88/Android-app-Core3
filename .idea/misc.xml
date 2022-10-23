@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_save_black_24dp.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.22972869873046878" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18575286865234375" />
         <entry key="app/src/main/res/layout/layout_row.xml" value="0.18729096989966554" />
+        <entry key="app/src/main/res/menu/layout.xml" value="0.25833333333333336" />
       </map>
     </option>
   </component>
