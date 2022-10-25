@@ -1,6 +1,7 @@
 package au.edu.swin.sdmd.core3
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,23 +11,30 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.io.File
 
 class MainActivity : AppCompatActivity() {
+    lateinit var list: List <Medals>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // getting the recyclerview by its id
         val medallist = findViewById<RecyclerView>(R.id.medallist)
-
-        val list = intiData()
+        //creating a list of medals
+         list = intiData()
+        //creating a sortedList which returns the top 10 medallists
         val sortedList = sortlist(list.toMutableList())
 
-        medallist.adapter = MedalsRecyclerViewAdapter(list,sortedList)
+        //this will pass the list and the sorted list into the Adapter
+        medallist.adapter = MedalsRecyclerViewAdapter(this,list,sortedList)
+        // this creates a vertical layout Manager
         medallist.layoutManager = LinearLayoutManager(this)
 
-
-
+    }
+    fun showDetail(item: Medals){
+        val i = Intent(this,DetailActivity::class.java)
+        i.putExtra("medals",item)
+        startActivity(i)
     }
 
 
@@ -39,8 +47,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //Handle item selection
         Log.i("RESULT", "hello")
-        val intent = Intent(this, DetailActivity::class.java)
-        startActivity(intent)
+        //we get access to sharedPreferences
+        var sharedPreferences = getSharedPreferences("medalsPosition",Context.MODE_PRIVATE)
+        //we get the metals position
+        var medalsPosition:Int = sharedPreferences.getInt("medalsPosition",-1)
+        //We call the showDetail function to move to the other screen and
+        // we can save the position
+        showDetail(list[medalsPosition])
         return super.onOptionsItemSelected(item)
     }
 
@@ -76,8 +89,8 @@ class MainActivity : AppCompatActivity() {
         medals.sortBy {
             it.total_medals
         }
-        Log.i("medals", "${medals}")
         return medals.takeLast(10).toMutableList()
+
 
     }
 }
