@@ -30,12 +30,15 @@ class MainActivity : AppCompatActivity() {
         // this creates a vertical layout Manager
         medallist.layoutManager = LinearLayoutManager(this)
 
+
+
     }
     fun showDetail(item: Medals){
         val i = Intent(this,DetailActivity::class.java)
         i.putExtra("medals",item)
         startActivity(i)
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -60,8 +63,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SuspiciousIndentation")
     private fun intiData(): List<Medals> {
         val list = mutableListOf<Medals>()
-        resources.openRawResource(R.raw.medallists).bufferedReader()
-            .forEachLine {
+        resources.openRawResource(R.raw.medallists).bufferedReader().forEachLine {
                 val temp = it.split(",")
                 if (temp[0] != "Country") {
                     list.add(
@@ -76,13 +78,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
-
-        list.forEach {
-            println("${it.country} -- ${it.ICO_code} -- ${it.time_competed} --${it.gold} -- ${it.silver} -- ${it.bronze} -- ${it.total_medals}")
-        }
-
         return list
-
     }
     //Highlight top 10 medal winning countries
     fun sortlist(medals: MutableList<Medals>): MutableList<Medals> {
@@ -90,7 +86,5 @@ class MainActivity : AppCompatActivity() {
             it.total_medals
         }
         return medals.takeLast(10).toMutableList()
-
-
     }
 }

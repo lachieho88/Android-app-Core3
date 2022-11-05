@@ -46,9 +46,9 @@ class MedalsRecyclerViewAdapter(
     inner class ViewHolder(private val v: View) : RecyclerView.ViewHolder(v) {
 
         val layout_row = v.findViewById<LinearLayout>(R.id.layout_row)
-        val country = v.findViewById<TextView>(R.id.Country)
+        val country = v.findViewById<TextView>(R.id.country)
         val ICO_code = v.findViewById<TextView>(R.id.IOC_code)
-        val num_of_medals = v.findViewById<TextView>(R.id.Number_of_medals)
+        val num_of_medals = v.findViewById<TextView>(R.id.num_of_medals)
 
         // binds the list items to a view
         fun bind(item: Medals, position: Int){
@@ -59,10 +59,22 @@ class MedalsRecyclerViewAdapter(
             //when an item is clicked, a Toast or Snackbar is required to denote the click,
             //and must contain details relating to the row
             layout_row.setOnClickListener {
-                val text = "${item.country} has won ${item.gold} gold medals"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
+                //saving the medals and it's properties to sharedPreferences
+                var sharedPref = context.getSharedPreferences("medals",Context.MODE_PRIVATE)
+                sharedPref.edit().apply{
+                    putString("country",item.country)
+                    putString("icoCode",item.ICO_code)
+                    putString("gold",item.gold.toString())
+                    putString("silver",item.silver.toString())
+                    putString("bronze",item.bronze.toString())
+                    apply()
+                }
+                //For Extension submissions, when an item is clicked,
+                // a BottomSheetDialogFragment (also known as a Modal Bottom Sheet) is required to denote the click,
+                // and must contain details relating to the row
+                val modalBottomSheet = BottomSheetFragment()
+                val supportFragmentManager = (context as MainActivity).supportFragmentManager
+                modalBottomSheet.show(supportFragmentManager,"ModalBottomSheet")
 
                 //This will save the medal position to sharedPreferences
                 var sharedPreferences = context.getSharedPreferences("medalsPosition",Context.MODE_PRIVATE)
@@ -79,8 +91,6 @@ class MedalsRecyclerViewAdapter(
             {
                 layout_row.setBackgroundColor(Color.WHITE)
             }
-
-
         }
     }
 
